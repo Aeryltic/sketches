@@ -1,27 +1,50 @@
+enum BitType {
+  CAKE, SAND;
+}
+
 class Bit {
-  private static final float ROT_DIV = 1.0 / 20.0;
+
+  private static final float ROT_DIV = 1.0 / 260.0;
+  private static final float FRICTION = 0.2;
+  private static final int RED_MIN = 170;
+  private static final int RED_MAX = 255;
+  private static final int GRN_MIN = 170;
+  private static final int GRN_MAX = 255;
+  private static final int BLU_MIN = 170;
+  private static final int BLU_MAX = 255;
 
   public PVector pos;
   public PVector speed;
   public PVector acc;
   public float angle;
   public float len;
-  public int stroke;
+  public float stroke;
   public color c;
-  public float rotSpeed;
-  
+  //public float rotSpeed;
+  public float mass_rec;
+
   public boolean alive;
 
-  public Bit(float x, float y) {
+  public Bit(float x, float y, BitType type) {
     pos = new PVector(x, y);
     speed = new PVector(0, 0);
     acc = new PVector(0, 0);
     angle = random(359) / 180.0 * PI;
-    len = random(5) + 10;
-    stroke = round(random(2)) + 2;
-    c = color(100 + random(155), 100 + random(155), 100 + random(155));
-    rotSpeed = 0;
-    
+    switch(type) {
+      case CAKE:
+        len = random(2) + 3;
+        stroke = random(2) + 0.5;
+        c = color(random(170, 255), random(170, 255), random(BLU_MIN, BLU_MAX));
+        break;
+      case SAND:
+        len = random(1) + 1;
+        stroke = random(1) + 1;
+        c = color(random(240, 255), random(240, 255), random(50, 60));
+        break;
+    //rotSpeed = 0;
+    }
+    mass_rec = 1.0 / (stroke * len / 2.0);
+
     alive = true;
   }
 
@@ -37,7 +60,6 @@ class Bit {
   }
 
   public void applyForce(PVector force) {
-    speed.add(force);
-    rotSpeed = (force.heading()) * ROT_DIV;
+    speed.add(PVector.mult(force, mass_rec));
   }
 }

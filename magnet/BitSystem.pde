@@ -1,16 +1,18 @@
 class BitSystem {
+  private static final float CLEAR_FORCE = 70;
+
   private ArrayList<Bit> bits;
   private MagneticField magField; 
 
   public BitSystem() {
     bits = new ArrayList();
-    magField = new MagneticField(width, height); // screen width and height
-
-    magField.turnOnRect(300, 300, 20, 300);
+    magField = new MagneticField();
   }
 
   public void update() {
-    for (Bit bit : bits) {
+    for (int i = 0; i < bits.size(); i++) {
+      Bit bit = bits.get(i);
+
       if (bit.alive == true) {
         bit.acc.mult(0);
         bit.acc.sub(bit.speed);
@@ -18,31 +20,32 @@ class BitSystem {
         if (magField.mag[bY][bX] == true) {
           bit.acc.limit(magField.force);
         } else {
-          bit.acc.limit(0.3);
+          bit.acc.limit(Bit.FRICTION);
         }
         bit.speed.add(bit.acc);
 
         bit.pos.add(bit.speed);
         if (bit.pos.x < 0 || bit.pos.y < 0 || bit.pos.x >= width || bit.pos.y >= height) {
-          bit.alive = false;
+          bits.remove(i);
+          i--;
           continue;
         }
 
-        if (bit.speed.magSq() > 0) {
-          bit.angle += bit.rotSpeed;
-        }
+        bit.angle += bit.speed.mag() * (bit.speed.x > 0 ? 1 : -1) * Bit.ROT_DIV;
 
         bit.draw();
       }
     }
   }
 
-  public void addBits(float x, float y, int amount, float r) {
+  public void addBits(float x, float y, int amount, float r, BitType type) {
     for (int i=0; i < amount; i++) {
       PVector p = new PVector(random(r), 0);
       p.rotate(random(TWO_PI));
       p.add(x, y);
-      bits.add(new Bit(p.x, p.y));
+      if (p.x >= 0 && p.x < width && p.y >= 0 && p.y < height) {
+        bits.add(new Bit(p.x, p.y, type));
+      }
     }
   }
 
@@ -58,8 +61,26 @@ class BitSystem {
       }
     }
   }
-  
+
+  public void useForce(PVector force) {
+    for (Bit bit : bits) {
+      bit.applyForce(force);
+    }
+  }
+
   public void clear() {
-    bits.clear(); 
+    bits.clear();
+  }
+
+  public void storm() {
+    for (Bit bit : bits) {
+      bit.applyForce(PVector.random2D().mult(CLEAR_FORCE));
+    }
+  }
+
+  public void setString(String string) {
+    magField.clear();
+    storm();
+    magField.setString(string);
   }
 }
