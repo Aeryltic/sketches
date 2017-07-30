@@ -1,12 +1,14 @@
 class BitSystem {
-  private static final float CLEAR_FORCE = 70;
+  private static final float CLEAR_FORCE = 90;
 
   private ArrayList<Bit> bits;
   private MagneticField magField; 
+  private FlowField flowField;
 
   public BitSystem() {
     bits = new ArrayList();
     magField = new MagneticField();
+    flowField = new FlowField(width / 10, height / 10);
   }
 
   public void update() {
@@ -15,13 +17,17 @@ class BitSystem {
 
       if (bit.alive == true) {
         bit.acc.mult(0);
+        
         bit.acc.sub(bit.speed);
+        //bit.acc.add(flowField.get(bit.pos.x, bit.pos.y));
         int bX = int(bit.pos.x), bY = int(bit.pos.y);
         if (magField.mag[bY][bX] == true) {
           bit.acc.limit(magField.force);
         } else {
           bit.acc.limit(Bit.FRICTION);
         }
+        
+        //bit.speed.add(flowField.get(bit.pos.x, bit.pos.y));
         bit.speed.add(bit.acc);
 
         bit.pos.add(bit.speed);

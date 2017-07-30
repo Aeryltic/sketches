@@ -7,13 +7,12 @@ class MagneticField {
   public float force;
 
   public MagneticField() {
-    mag = new boolean[height][];
-    for (int i = 0; i < height; i++) {
-      mag[i] = new boolean[width];
-      for (int j = 0; j < width; j++) {
-        mag[i][j] = false;
-      }
-    }
+    mag = new boolean[height][width];
+    //for (int i = 0; i < height; i++) {
+    //  for (int j = 0; j < width; j++) {
+    //    mag[i][j] = false;
+    //  }
+    //}
     force = 500;
   }
 

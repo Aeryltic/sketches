@@ -6,12 +6,6 @@ class Bit {
 
   private static final float ROT_DIV = 1.0 / 260.0;
   private static final float FRICTION = 0.2;
-  private static final int RED_MIN = 170;
-  private static final int RED_MAX = 255;
-  private static final int GRN_MIN = 170;
-  private static final int GRN_MAX = 255;
-  private static final int BLU_MIN = 170;
-  private static final int BLU_MAX = 255;
 
   public PVector pos;
   public PVector speed;
@@ -34,7 +28,7 @@ class Bit {
       case CAKE:
         len = random(2) + 3;
         stroke = random(2) + 0.5;
-        c = color(random(170, 255), random(170, 255), random(BLU_MIN, BLU_MAX));
+        c = color(random(170, 255), random(170, 255), random(170, 255));
         break;
       case SAND:
         len = random(1) + 1;

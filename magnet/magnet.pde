@@ -1,10 +1,11 @@
 BitSystem bitSystem;
 
 float radius = 120;
-int amount = 40;
+int amount = 60;
 float mX, mY;
 float force = 5;
-float minDist = 40;
+
+float minDist = 20;
 
 float dirForce = 4;
 
@@ -62,7 +63,7 @@ void keyPressed() {
     bitSystem.storm();
   } else if (key == 'c') {
     bitSystem.clear();
-  } else if (key == ENTER || keyCode == RETURN) {
+  } else if (key == ENTER || key == RETURN) {
     nextString();
   } else if (key == BACKSPACE) {
     prevString();
@@ -70,19 +71,14 @@ void keyPressed() {
     bitType = BitType.CAKE;
   } else if (key == '2') {
     bitType = BitType.SAND;
-  } else if (key == CODED) {
-    if (keyCode == UP) {
-      bitSystem.useForce(new PVector(0, -dirForce));
-    }
-    if (keyCode == DOWN) {
-      bitSystem.useForce(new PVector(0, dirForce));
-    }
-    if (keyCode == LEFT) {
-      bitSystem.useForce(new PVector(-dirForce, 0));
-    }
-    if (keyCode == RIGHT) {
-      bitSystem.useForce(new PVector(dirForce, 0));
-    }
+  } else if (key == 'w') {
+    bitSystem.useForce(new PVector(0, -dirForce));
+  } else if (key == 's') {
+    bitSystem.useForce(new PVector(0, dirForce));
+  } else if (key == 'a') {
+    bitSystem.useForce(new PVector(-dirForce, 0));
+  } else if (key == 'd') {
+    bitSystem.useForce(new PVector(dirForce, 0));
   }
 }
 
